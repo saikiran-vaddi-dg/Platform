@@ -1,7 +1,7 @@
 # Place this in: platform/.github/workflows/sync-to-clients.yml
 #
 # Triggers whenever you push to base/dev, base/stag, or base/qa
-# Pushes the same branch into CLIENT-1 repo (mirror)
+# Pushes the same branch into Client-1  repo (mirror)
 
 name: Sync base branches to clients
 
@@ -22,11 +22,11 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref }}
 
-      - name: Push mirror to CLIENT-1
+      - name: Push mirror to Client-1 
         env:
           CLIENT1_TOKEN: ${{ secrets.CLIENT_DISPATCH_PAT }}
           BRANCH: ${{ github.ref_name }}   # e.g. base/dev
         run: |
-          git remote add client1 https://x-access-token:${CLIENT1_TOKEN}@github.com/saikiran-vaddi-dg/CLIENT-1.git
+          git remote add client1 https://x-access-token:${CLIENT1_TOKEN}@github.com/saikiran-vaddi-dg/Client-1 .git
           git push client1 HEAD:refs/heads/${BRANCH} --force
-          echo "✅ Synced ${BRANCH} → CLIENT-1/${BRANCH}"
+          echo "✅ Synced ${BRANCH} → Client-1 /${BRANCH}"
