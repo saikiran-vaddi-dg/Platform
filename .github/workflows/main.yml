@@ -1,0 +1,16 @@
+# .github/workflows/sync-clients.yml (in platform repo)
+on:
+  push:
+    branches: ['base/**']
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Push mirror to Client-1
+        run: |
+          git remote add client1 https://x-access-token:${{ secrets.CLIENT_DISPATCH_PAT }}@github.com/saikiran-vaddi-dg/Client-1.git
+          git push client1 HEAD:refs/heads/${{ github.ref_name }} --force
