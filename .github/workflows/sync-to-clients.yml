@@ -1,7 +1,7 @@
 # .github/workflows/sync-clients.yml (in platform repo)
 on:
   push:
-    branches: ['base/**']
+    branches: ['base/dev']
 
 jobs:
   sync:
