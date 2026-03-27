@@ -49,7 +49,7 @@ jobs:
           git checkout base/dev
 
           # Fetch latest remote state so --force-with-lease doesn't fail with "stale info"
-          git fetch --prune client1 "${TARGET_BRANCH}:${TARGET_BRANCH}" || true
+          git fetch --prune Client-1 "${TARGET_BRANCH}:${TARGET_BRANCH}" || true
 
           # Push source to target (keeps Client-1/base/dev aligned to Platform/base/dev)
-          git push --force-with-lease client1 "HEAD:${TARGET_BRANCH}"
+          git push --force-with-lease Client-1 "HEAD:${TARGET_BRANCH}"
