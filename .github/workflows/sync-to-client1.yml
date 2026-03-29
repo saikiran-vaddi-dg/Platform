@@ -53,4 +53,31 @@ jobs:
 
           # Push source to target (keeps Client-1/base/dev aligned to Platform/base/dev)
           git push --force Client-1 "HEAD:${TARGET_BRANCH}"
- 
+
+      - name: Merge base/dev into Client-1 client1/dev
+        env:
+          TARGET_REPO: saikiran-vaddi-dg/Client-1
+          CLIENT_BRANCH: client1/dev
+          TOKEN: ${{ secrets.CLIENT_DISPATCH_PAT }}
+        run: |
+          set -euo pipefail
+
+          git config user.name  "saikiran-vaddi-dg"
+          git config user.email "saikiran-vaddi-dg@users.noreply.github.com"
+
+          # Remote already added in previous step
+          git remote remove Client-1 2>/dev/null || true
+          git remote add Client-1 "https://x-access-token:${TOKEN}@github.com/${TARGET_REPO}.git"
+
+          # Fetch client1/dev from Client-1 repo
+          git fetch Client-1 "${CLIENT_BRANCH}:${CLIENT_BRANCH}" || {
+            echo "Branch ${CLIENT_BRANCH} not found in Client-1 — skipping merge"
+            exit 0
+          }
+
+          # Switch to client1/dev and merge base/dev into it
+          git checkout "${CLIENT_BRANCH}"
+          git merge base/dev --no-edit -m "chore: merge base/dev into ${CLIENT_BRANCH} [auto-sync]"
+
+          # Push the merged client1/dev back to Client-1
+          git push Client-1 "HEAD:${CLIENT_BRANCH}"
