@@ -69,15 +69,15 @@ jobs:
           git remote remove Client-1 2>/dev/null || true
           git remote add Client-1 "https://x-access-token:${TOKEN}@github.com/${TARGET_REPO}.git"
 
-          # Fetch client1/dev from Client-1 repo
-          git fetch Client-1 "${CLIENT_BRANCH}:${CLIENT_BRANCH}" || {
-            echo "Branch ${CLIENT_BRANCH} not found in Client-1 — skipping merge"
+          # Fetch both branches from Client-1 repo
+          git fetch Client-1 "base/dev" "client1/dev" || {
+            echo "Failed to fetch branches from Client-1 — skipping merge"
             exit 0
           }
 
-          # Switch to client1/dev and merge base/dev into it
-          git checkout "${CLIENT_BRANCH}"
-          git merge base/dev --no-edit --allow-unrelated-histories -m "chore: merge base/dev into ${CLIENT_BRANCH} [auto-sync]"
+          # Switch to client1/dev and merge Client-1's base/dev into it
+          git checkout -B "${CLIENT_BRANCH}" "Client-1/${CLIENT_BRANCH}"
+          git merge Client-1/base/dev --no-edit --allow-unrelated-histories -m "chore: merge base/dev into ${CLIENT_BRANCH} [auto-sync]"
 
           # Push the merged client1/dev back to Client-1
           git push Client-1 "HEAD:${CLIENT_BRANCH}"
