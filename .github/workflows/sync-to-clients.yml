@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - base/dev
-      - base/int
+      - base/integration
 
 permissions:
   contents: read
